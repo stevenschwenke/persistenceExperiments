@@ -1,5 +1,6 @@
 import de.stevenschwenke.java.persistenceExperiments.dao.PersonDAO;
 import de.stevenschwenke.java.persistenceExperiments.dao.PersonDAOImpl;
+import de.stevenschwenke.java.persistenceExperiments.model.Name;
 import de.stevenschwenke.java.persistenceExperiments.model.Person;
 import org.hibernate.classic.Session;
 import org.junit.Test;
@@ -29,21 +30,18 @@ public class MyTest {
     @Autowired
     private PersonDAO personDao;
 
-//    @BeforeClass
-//    public void setup() {
-//        Instant begin2 = Instant.now();
-//
-//        for(int counter = 0 ; counter<datasetCount; counter++) {
-//            Person p = new Person();
-//            personDao.save(p);
-//        }
-//        Instant end2 = Instant.now();
-//        logger.debug("Insert data in "+Duration.between(begin2, end2).getSeconds()+"s");
-//    }
+    @Test
+    public void compositionTest() {
+        Person person = new Person("Name", "Surname");
+        personDao.save(person);
 
+        Person loadedPerson = personDao.list().get(0);
+        assertEquals("Name", loadedPerson.getName().getString());
+        assertEquals("Surname", loadedPerson.getSurname().getString());
+    }
 
     @Test
-    public void performanceTest(){
+    public void performanceTest() {
 
         fillDatabase();
 
@@ -63,8 +61,8 @@ public class MyTest {
     private void fillDatabase() {
         Instant begin2 = Instant.now();
 
-        for(int counter = 0 ; counter<datasetCount; counter++) {
-            Person p = new Person();
+        for (int counter = 0; counter < datasetCount; counter++) {
+            Person p = new Person("Name", "Surname");
             personDao.save(p);
         }
         Instant end2 = Instant.now();

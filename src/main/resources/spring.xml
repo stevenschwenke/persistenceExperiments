@@ -19,6 +19,8 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>de.stevenschwenke.java.persistenceExperiments.model.Person</value>
+				<value>de.stevenschwenke.java.persistenceExperiments.model.Name</value>
+				<value>de.stevenschwenke.java.persistenceExperiments.model.Surname</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

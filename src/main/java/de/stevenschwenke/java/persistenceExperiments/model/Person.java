@@ -1,18 +1,7 @@
 package de.stevenschwenke.java.persistenceExperiments.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-/**
- * Entity bean with JPA annotations
- * Hibernate provides JPA implementation
- * @author pankaj
- *
- */
 @Entity
 @Table(name="PERSON")
 public class Person {
@@ -21,10 +10,23 @@ public class Person {
 	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	
-	private String name;
-	
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL)
+	private Name name;
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL)
+	private Surname surname;
+
 	private String country;
+
+	/** Private constructor for Hibernate */
+	private Person() {
+	}
+
+	public Person(String name, String surname) {
+		setName(new Name(this,name));
+		setSurname(new Surname(this, surname));
+	}
 
 	public int getId() {
 		return id;
@@ -34,12 +36,20 @@ public class Person {
 		this.id = id;
 	}
 
-	public String getName() {
+	public Name getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(Name name) {
 		this.name = name;
+	}
+
+	public Surname getSurname() {
+		return surname;
+	}
+
+	public void setSurname(Surname surname) {
+		this.surname = surname;
 	}
 
 	public String getCountry() {
