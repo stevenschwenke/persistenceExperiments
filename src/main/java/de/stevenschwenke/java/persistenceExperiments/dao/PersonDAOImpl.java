@@ -2,6 +2,7 @@ package de.stevenschwenke.java.persistenceExperiments.dao;
 
 import java.util.List;
 
+import de.stevenschwenke.java.persistenceExperiments.model.City;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -28,12 +29,27 @@ public class PersonDAOImpl implements PersonDAO {
 		session.close();
 	}
 
+	public void save(Object o) {
+		Session session = this.sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		session.persist(o);
+		tx.commit();
+		session.close();
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Person> list() {
 		Session session = this.sessionFactory.openSession();
-		List<Person> personList = session.createQuery("from Person").list();
+		List<Person> persons = session.createQuery("from Person").list();
 		session.close();
-		return personList;
+		return persons;
+	}
+
+	public List<City> getCities() {
+		Session session = this.sessionFactory.openSession();
+		List<City> cities = session.createQuery("from City").list();
+		session.close();
+		return cities;
 	}
 
 }

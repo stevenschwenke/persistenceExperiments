@@ -11,13 +11,15 @@ public class Person {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "person", cascade = CascadeType.ALL)
 	private Name name;
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "person", cascade = CascadeType.ALL)
 	private Surname surname;
 
-	private String country;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="PERSON_ID")
+	private City location;
 
 	/** Private constructor for Hibernate */
 	private Person() {
@@ -52,17 +54,17 @@ public class Person {
 		this.surname = surname;
 	}
 
-	public String getCountry() {
-		return country;
+	public City getLocation() {
+		return location;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setLocation(City location) {
+		this.location = location;
 	}
-	
+
 	@Override
 	public String toString(){
-		return "id="+id+", name="+name+", country="+country;
+		return "id="+id+", name="+name;
 	}
 
 	@Override
