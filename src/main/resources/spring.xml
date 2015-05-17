@@ -23,6 +23,7 @@
 				<value>de.stevenschwenke.java.persistenceExperiments.model.Surname</value>
 				<value>de.stevenschwenke.java.persistenceExperiments.model.City</value>
 				<value>de.stevenschwenke.java.persistenceExperiments.model.CityName</value>
+				<value>de.stevenschwenke.java.persistenceExperiments.model.Hobby</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

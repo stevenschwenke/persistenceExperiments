@@ -1,6 +1,7 @@
 import de.stevenschwenke.java.persistenceExperiments.dao.PersonDAO;
 import de.stevenschwenke.java.persistenceExperiments.dao.PersonDAOImpl;
 import de.stevenschwenke.java.persistenceExperiments.model.City;
+import de.stevenschwenke.java.persistenceExperiments.model.Hobby;
 import de.stevenschwenke.java.persistenceExperiments.model.Person;
 import org.hibernate.FetchMode;
 import org.hibernate.classic.Session;
@@ -15,8 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -27,7 +31,7 @@ public class MyTest {
 
     private Logger logger = LoggerFactory.getLogger(MyTest.class);
 
-    private final int datasetCount = 90000;
+    private final int datasetCount = 10000;
 
     @Autowired
     private PersonDAO personDao;
@@ -37,14 +41,21 @@ public class MyTest {
      */
     @Test
     public void compositionTest() {
+
         Person person = new Person("Name", "Surname");
         person.setLocation(new City("Berlin"));
+
+        HashSet<Person> persons = new HashSet<Person>();
+        persons.add(person);
+        Hobby hobby = new Hobby(persons, "Programming");
+        person.addHobby(hobby);
         personDao.save(person);
 
-        Person loadedPerson = personDao.list().get(0);
+        Person loadedPerson = personDao.loadDeep().get(0);
         assertEquals("Name", loadedPerson.getName().getString());
         assertEquals("Surname", loadedPerson.getSurname().getString());
         assertEquals("Berlin", loadedPerson.getLocation().getName().getString());
+        assertEquals("Programming", loadedPerson.getHobbies().iterator().next().getString());
     }
 
     /**
@@ -64,18 +75,18 @@ public class MyTest {
 
         // 1. Plain criteria
         // Using this method, the Hibernate configuration is used to determine what gets retrieved from the database.
-//        plainCriteria(session); // 5s with 9.000.000 records
+        plainCriteria(session); // 1s with 1.000.000 records
 
         // 2. Criteria with explicit eager-fetching
         // The Hibernate configuration is used and enhanced by statements what should be loaded eager. This method
         // is not refactor-safe because a newly added property would have to be added in each and every query.
-//        criteriaWithExplicitFetch(session); // 5s with 9.000.000 recordsC
+//        criteriaWithExplicitFetch(session); // 1s with 1.000.000 recordsC
 
         // 3. HQL
-//        hql(session); // 5s with 9.000.000 records
+//        hql(session); // 3s with 1.000.000 records
 
         // 4. getByID
-        singleRequestsWithGet(session); // 15s with 9.000.000 records
+//        singleRequestsWithGet(session); // 2s with 1.000.000 records
     }
 
     private void plainCriteria(Session session) {
@@ -128,6 +139,7 @@ public class MyTest {
         assertNotNull(p.getName());
         assertNotNull(p.getSurname());
         assertNotNull(p.getLocation().getName());
+        assertFalse(p.getHobbies().isEmpty());
     }
 
     private void fillDatabase() {
@@ -136,6 +148,10 @@ public class MyTest {
         for (int counter = 0; counter < datasetCount; counter++) {
             Person p = new Person("Name", "Surname");
             p.setLocation(new City("Berlin"));
+            Set<Person> persons = new HashSet<Person>();
+            persons.add(p);
+            Hobby hobby = new Hobby(persons,"Programming");
+            p.addHobby(hobby);
             personDao.save(p);
         }
         Instant end2 = Instant.now();

@@ -8,8 +8,10 @@ import de.stevenschwenke.java.persistenceExperiments.model.Person;
 public interface PersonDAO {
 
 	public void save(Object p);
+
+	public void save(Person p);
 	
-	public List<Person> list();
+	public List<Person> loadDeep();
 
 	public List<City> getCities();
 }

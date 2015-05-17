@@ -1,8 +1,11 @@
 package de.stevenschwenke.java.persistenceExperiments.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import de.stevenschwenke.java.persistenceExperiments.model.City;
+import de.stevenschwenke.java.persistenceExperiments.model.Hobby;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -24,6 +27,9 @@ public class PersonDAOImpl implements PersonDAO {
 	public void save(Person p) {
 		Session session = this.sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
+		for(Hobby h: p.getHobbies()) {
+			session.persist(h);
+		}
 		session.persist(p);
 		tx.commit();
 		session.close();
@@ -38,9 +44,9 @@ public class PersonDAOImpl implements PersonDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Person> list() {
+	public List<Person> loadDeep() {
 		Session session = this.sessionFactory.openSession();
-		List<Person> persons = session.createQuery("from Person").list();
+		List<Person> persons = session.createCriteria(Person.class).setFetchMode("hobbies", FetchMode.JOIN).list();
 		session.close();
 		return persons;
 	}
