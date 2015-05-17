@@ -64,6 +64,10 @@ public class MyTest {
     @Test
     public void performanceTest() {
 
+        /*
+            TODO The results below are strange. I expected to see that HQL is way faster than Criteria
+         */
+
         fillDatabase();
 
         PersonDAOImpl impl = (PersonDAOImpl) this.personDao;
@@ -73,20 +77,22 @@ public class MyTest {
         // !!! Just uncomment the one method under test because of caching !!!
         ////////////////////////////////////////////////////////////////////////////
 
-        // 1. Plain criteria
+        // 1.1 Load several objects with plain criteria
         // Using this method, the Hibernate configuration is used to determine what gets retrieved from the database.
         plainCriteria(session); // 1s with 1.000.000 records
 
-        // 2. Criteria with explicit eager-fetching
+        // 1.2. Load several objects Criteria with explicit eager-fetching
         // The Hibernate configuration is used and enhanced by statements what should be loaded eager. This method
         // is not refactor-safe because a newly added property would have to be added in each and every query.
 //        criteriaWithExplicitFetch(session); // 1s with 1.000.000 recordsC
 
-        // 3. HQL
+        // 1.3. Load several objects HQL
 //        hql(session); // 3s with 1.000.000 records
 
-        // 4. getByID
+        // 2.1. Load one object with getByID
 //        singleRequestsWithGet(session); // 2s with 1.000.000 records
+
+        // TODO Add more ways to load exactly one object and more ways to load several objects
     }
 
     private void plainCriteria(Session session) {
