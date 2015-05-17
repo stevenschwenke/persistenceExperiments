@@ -5,7 +5,7 @@ import java.util.List;
 import de.stevenschwenke.java.persistenceExperiments.model.City;
 import de.stevenschwenke.java.persistenceExperiments.model.Person;
 
-public interface PersonDAO {
+public interface DAO {
 
 	public void save(Object p);
 

@@ -1,5 +1,5 @@
-import de.stevenschwenke.java.persistenceExperiments.dao.PersonDAO;
-import de.stevenschwenke.java.persistenceExperiments.dao.PersonDAOImpl;
+import de.stevenschwenke.java.persistenceExperiments.dao.DAO;
+import de.stevenschwenke.java.persistenceExperiments.dao.DAOImpl;
 import de.stevenschwenke.java.persistenceExperiments.model.City;
 import de.stevenschwenke.java.persistenceExperiments.model.Hobby;
 import de.stevenschwenke.java.persistenceExperiments.model.Person;
@@ -34,7 +34,7 @@ public class MyTest {
     private final int datasetCount = 10000;
 
     @Autowired
-    private PersonDAO personDao;
+    private DAO dao;
 
     /**
      * This test makes sure one instance of a {@link Person} can be saved and retrieved correctly.
@@ -49,9 +49,9 @@ public class MyTest {
         persons.add(person);
         Hobby hobby = new Hobby(persons, "Programming");
         person.addHobby(hobby);
-        personDao.save(person);
+        dao.save(person);
 
-        Person loadedPerson = personDao.loadDeep().get(0);
+        Person loadedPerson = dao.loadDeep().get(0);
         assertEquals("Name", loadedPerson.getName().getString());
         assertEquals("Surname", loadedPerson.getSurname().getString());
         assertEquals("Berlin", loadedPerson.getLocation().getName().getString());
@@ -70,7 +70,7 @@ public class MyTest {
 
         fillDatabase();
 
-        PersonDAOImpl impl = (PersonDAOImpl) this.personDao;
+        DAOImpl impl = (DAOImpl) this.dao;
         Session session = impl.getSessionFactory().getCurrentSession();
 
         ////////////////////////////////////////////////////////////////////////////
@@ -89,10 +89,14 @@ public class MyTest {
         // 1.3. Load several objects HQL
 //        hql(session); // 3s with 1.000.000 records
 
+        // TODO load several objects via SQL
+
         // 2.1. Load one object with getByID
 //        singleRequestsWithGet(session); // 2s with 1.000.000 records
 
         // TODO Add more ways to load exactly one object and more ways to load several objects
+
+        // TODO load one object via SQL
     }
 
     private void plainCriteria(Session session) {
@@ -158,7 +162,7 @@ public class MyTest {
             persons.add(p);
             Hobby hobby = new Hobby(persons,"Programming");
             p.addHobby(hobby);
-            personDao.save(p);
+            dao.save(p);
         }
         Instant end2 = Instant.now();
         logger.info("Insert data in " + Duration.between(begin2, end2).getSeconds() + "s");

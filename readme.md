@@ -1,3 +1,5 @@
+This repository contains some experiments for persisting data with Hibernate and Spring. It's a playground for me that is not supposed to deliver any product or use for others. However, it would be nice if others would have some kind of benefit by copying code from here. Feel free to do so!
+
 TODO
 ====
 

@@ -1,7 +1,6 @@
 package de.stevenschwenke.java.persistenceExperiments.dao;
 
 import java.util.List;
-import java.util.Set;
 
 import de.stevenschwenke.java.persistenceExperiments.model.City;
 import de.stevenschwenke.java.persistenceExperiments.model.Hobby;
@@ -12,7 +11,7 @@ import org.hibernate.Transaction;
 
 import de.stevenschwenke.java.persistenceExperiments.model.Person;
 
-public class PersonDAOImpl implements PersonDAO {
+public class DAOImpl implements DAO {
 
 	private SessionFactory sessionFactory;
 

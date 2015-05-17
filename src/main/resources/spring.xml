@@ -39,7 +39,7 @@
 		<property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory"></property>
 	</bean>
 
-	<bean id="personDAO" class="de.stevenschwenke.java.persistenceExperiments.dao.PersonDAOImpl">
+	<bean id="personDAO" class="de.stevenschwenke.java.persistenceExperiments.dao.DAOImpl">
 		<property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory" />
 	</bean>
 </beans>
